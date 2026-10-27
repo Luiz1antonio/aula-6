@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mercado Fácil</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" onclick="showScreen('inicio'); return false;"><span class="brand-icon">🛒</span> Mercado<span>Fácil</span></a>
+    <nav>
+      <button onclick="showScreen('inicio')">Início</button>
+      <button onclick="showScreen('mercado')">Produtos</button>
+      <button onclick="showScreen('pedidos')">Meus pedidos</button>
+    </nav>
+    <button class="cart-top" onclick="showScreen('carrinho')">🛍️ Carrinho <b id="cartCount">0</b></button>
+  </header>
+
+  <main>
+    <!-- TELA 1: INÍCIO -->
+    <section id="inicio" class="screen active">
+      <div class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">SEU MERCADO ONLINE</span>
+          <h1>Suas compras do dia a dia, <span>mais simples.</span></h1>
+          <p>Encontre produtos fresquinhos, ofertas especiais e tudo o que sua casa precisa sem sair de casa.</p>
+          <div class="hero-actions">
+            <button class="btn primary" onclick="showScreen('mercado')">Começar a comprar →</button>
+            <button class="btn secondary" onclick="showScreen('login')">Entrar na minha conta</button>
+          </div>
+          <div class="benefits"><span>✓ Ofertas da semana</span><span>✓ Compra fácil e rápida</span></div>
+        </div>
+        <div class="hero-art"><div class="sun"></div><div class="basket">🧺</div><div class="floating fruit">🍎</div><div class="floating carrot">🥕</div><div class="floating milk">🥛</div></div>
+      </div>
+      <div class="section-heading"><div><span class="eyebrow">PRATICIDADE PARA VOCÊ</span><h2>Como funciona?</h2></div></div>
+      <div class="feature-grid">
+        <article class="feature"><span>🥬</span><h3>Escolha seus produtos</h3><p>Explore as categorias e encontre seus favoritos.</p></article>
+        <article class="feature"><span>🛒</span><h3>Monte seu carrinho</h3><p>Adicione itens e confira o valor da compra.</p></article>
+        <article class="feature"><span>🚚</span><h3>Receba suas compras</h3><p>Finalize seu pedido de forma prática.</p></article>
+      </div>
+    </section>
+
+    <!-- TELA 2: CADASTRO / LOGIN -->
+    <section id="login" class="screen auth-screen">
+      <div class="auth-intro"><span class="eyebrow">BEM-VINDO AO MERCADO FÁCIL</span><h1>É bom ter você por aqui!</h1><p>Entre na sua conta ou crie seu cadastro para organizar suas compras.</p><div class="auth-emoji">🛒🥦🍊</div></div>
+      <div class="auth-card">
+        <div class="tabs"><button id="loginTab" class="tab active" onclick="setAuthMode('login')">Entrar</button><button id="registerTab" class="tab" onclick="setAuthMode('register')">Criar cadastro</button></div>
+        <form id="authForm" onsubmit="handleAuth(event)">
+          <label for="nome">Nome completo <span id="nameOptional">(opcional para entrar)</span></label>
+          <input id="nome" type="text" placeholder="Seu nome">
+          <label for="email">E-mail</label><input id="email" type="email" placeholder="voce@email.com" required>
+          <label for="senha">Senha</label><input id="senha" type="password" placeholder="Digite sua senha" minlength="4" required>
+          <button class="btn primary full" id="authSubmit" type="submit">Entrar</button>
+          <p class="form-note" id="authMessage">Demonstração: os dados não são enviados para um servidor.</p>
+        </form>
+      </div>
+    </section>
+
+    <!-- TELA 3: SISTEMA PRINCIPAL / PRODUTOS -->
+    <section id="mercado" class="screen">
+      <div class="page-heading"><div><span class="eyebrow">LISTA DE PRODUTOS</span><h1>O que vai para sua sacola?</h1><p>Escolha os produtos para adicionar ao carrinho.</p></div><div class="search-wrap">🔎 <input id="searchInput" type="search" placeholder="Buscar produto..." oninput="renderProducts()"></div></div>
+      <div class="category-row">
+        <button class="category active" onclick="setCategory('Todos', this)">Todos</button><button class="category" onclick="setCategory('Frutas', this)">🍎 Frutas</button><button class="category" onclick="setCategory('Verduras', this)">🥬 Verduras</button><button class="category" onclick="setCategory('Mercearia', this)">🍚 Mercearia</button><button class="category" onclick="setCategory('Bebidas', this)">🥛 Bebidas</button>
+      </div>
+      <div id="productGrid" class="product-grid"></div>
+    </section>
+
+    <!-- TELA 4: CARRINHO / FINALIZAÇÃO -->
+    <section id="carrinho" class="screen">
+      <div class="page-heading"><div><span class="eyebrow">SUA COMPRA</span><h1>Meu carrinho</h1><p>Confira os itens antes de finalizar.</p></div><button class="btn secondary" onclick="showScreen('mercado')">← Continuar comprando</button></div>
+      <div class="cart-layout"><div id="cartItems" class="cart-items"></div><aside class="summary"><h2>Resumo do pedido</h2><div class="summary-line"><span>Subtotal</span><b id="subtotal">R$ 0,00</b></div><div class="summary-line"><span>Entrega</span><b id="delivery">R$ 7,00</b></div><div class="summary-line total"><span>Total</span><b id="total">R$ 7,00</b></div><label for="endereco">Endereço de entrega</label><input id="endereco" placeholder="Rua, número, bairro"><label for="pagamento">Forma de pagamento</label><select id="pagamento"><option>Pix</option><option>Cartão de crédito</option><option>Dinheiro na entrega</option></select><button class="btn primary full" onclick="finishOrder()">Finalizar pedido</button><p class="form-note">Pedido demonstrativo, sem cobrança real.</p></aside></div>
+    </section>
+
+    <!-- TELA 5: PEDIDOS -->
+    <section id="pedidos" class="screen">
+      <div class="page-heading"><div><span class="eyebrow">ACOMPANHE SUAS COMPRAS</span><h1>Meus pedidos</h1><p>Veja os pedidos realizados nesta demonstração.</p></div><button class="btn primary" onclick="showScreen('mercado')">+ Nova compra</button></div>
+      <div id="ordersList" class="orders-list"><div class="empty-state"><span>📦</span><h2>Nenhum pedido ainda</h2><p>Quando você finalizar uma compra, ela aparecerá aqui.</p><button class="btn primary" onclick="showScreen('mercado')">Explorar produtos</button></div></div>
+    </section>
+  </main>
+
+  <footer><div class="brand">🛒 Mercado<span>Fácil</span></div><p>Projeto demonstrativo para prática de HTML, CSS e JavaScript.</p><small>© 2026 Mercado Fácil</small></footer>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
